@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transfert de Fichiers - Posteum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #305f72;
+      --secondary: #8fc0a9;
+      --accent: #f9f9f9;
+      --dark: #1f1f1f;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--accent);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .service-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex-grow: 1;
+    }
+
+    .service-header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .service-header h1 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .service-content {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .upload-area {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: var(--secondary);
+      background: rgba(143, 192, 169, 0.05);
+    }
+
+    .upload-area i {
+      font-size: 48px;
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+
+    .file-list {
+      margin-top: 20px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .file-item i {
+      margin-right: 15px;
+      color: var(--primary);
+    }
+
+    .file-info {
+      flex: 1;
+    }
+
+    .file-actions {
+      margin-left: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--secondary);
+      color: var(--light);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-secondary {
+      background: #ddd;
+      color: var(--dark);
+    }
+
+    .btn:hover {
+      background-color: #76a68a;
+    }
+
+    .btn-secondary:hover {
+      background: #ccc;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="tableau-de-bord.html" class="logo">Posteum</a>
+    <div class="user-menu">
+      <span>Bonjour, <strong>Jean</strong></span>
+      <img src="https://ui-avatars.com/api/?name=Jean+Dupont&background=8fc0a9&color=fff" alt="Photo de profil" />
+    </div>
+  </header>
+
+  <div class="service-container">
+    <div class="service-header">
+      <h1>Transfert de Fichiers</h1>
+      <p>Sécurisez et transmettez vos fichiers importants à vos proches</p>
+    </div>
+
+    <div class="service-content">
+      <form id="transferForm">
+        <div class="form-group">
+          <label>Destinataires</label>
+          <input type="email" class="form-control" placeholder="email@exemple.com" required>
+          <small>Ajoutez les emails des personnes autorisées à recevoir ces fichiers</small>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <h3>Glissez-déposez vos fichiers ici</h3>
+          <p>ou cliquez pour parcourir vos fichiers</p>
+          <input type="file" id="fileInput" style="display: none;" multiple>
+        </div>
+        
+        <div class="file-list" id="fileList">
+          <!-- Les fichiers ajoutés apparaîtront ici -->
+        </div>
+        
+        <div class="form-group">
+          <label for="accessCode">Code d'accès (optionnel)</label>
+          <input type="text" id="accessCode" class="form-control" placeholder="Créez un code pour sécuriser l'accès">
+        </div>
+        
+        <div class="form-group">
+          <input type="checkbox" id="confirmTransfer" required>
+          <label for="confirmTransfer">Je confirme que je souhaite transférer ces fichiers après mon décès</label>
+        </div>
+        
+        <div class="btn-group">
+          <button type="submit" class="btn">Enregistrer</button>
+          <a href="tableau-de-bord.html" class="btn btn-secondary">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Posteum - Tous droits réservés</p>
+    <div style="margin-top: 20px;">
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="conditions.html">Conditions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('uploadArea').addEventListener('click', function() {
+      document.getElementById('fileInput').click();
+    });
+    
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const files = e.target.files;
+      const fileList = document.getElementById('fileList');
+      fileList.innerHTML = '';
+      
+      for (let i = 0; i < files.length; i++) {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        let iconClass = 'fa-file';
+        if (files[i].type.includes('image/')) iconClass = 'fa-file-image';
+        else if (files[i].type.includes('pdf')) iconClass = 'fa-file-pdf';
+        else if (files[i].type.includes('video/')) iconClass = 'fa-file-video';
+        
+        fileItem.innerHTML = `
+          <i class="fas ${iconClass}"></i>
+          <div class="file-info">
+            <div>${files[i].name}</div>
+            <small>${(files[i].size / 1024 / 1024).toFixed(2)} MB</small>
+          </div>
+          <div class="file-actions">
+            <button type="button" class="btn-secondary" style="padding: 5px 10px;" onclick="this.parentElement.parentElement.remove()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        
+        fileList.appendChild(fileItem);
+      }
+    });
+    
+    // Gestion du glisser-déposer
+    const uploadArea = document.getElementById('uploadArea');
+    
+    uploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = var(--secondary);
+      this.style.backgroundColor = 'rgba(143, 192, 169, 0.1)';
+    });
+    
+    uploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#ddd';
+      this.style.backgroundColor = '';
+    });
+    
+    uploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#ddd';
+      this.style.backgroundColor = '';
+      
+      document.getElementById('fileInput').files = e.dataTransfer.files;
+      const event = new Event('change');
+      document.getElementById('fileInput').dispatchEvent(event);
+    });
+    
+    document.getElementById('transferForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (!document.getElementById('confirmTransfer').checked) {
+        alert('Veuillez confirmer le transfert');
+        return;
+      }
+      
+      // Ici, vous enverriez les fichiers à votre backend
+      alert('Vos fichiers ont été enregistrés et seront transférés selon vos instructions.');
+      window.location.href = 'tableau-de-bord.html';
+    });
+  </script>
+</body>
+</html>

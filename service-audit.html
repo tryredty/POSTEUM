@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Audit Digital - Posteum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #305f72;
+      --secondary: #8fc0a9;
+      --accent: #f9f9f9;
+      --dark: #1f1f1f;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--accent);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .service-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex-grow: 1;
+    }
+
+    .service-header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .service-header h1 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .service-content {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .audit-steps {
+      margin-bottom: 30px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .step-number {
+      background: var(--secondary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: var(--secondary);
+      color: var(--light);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #76a68a;
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="tableau-de-bord.html" class="logo">Posteum</a>
+    <div class="user-menu">
+      <span>Bonjour, <strong>Jean</strong></span>
+      <img src="https://ui-avatars.com/api/?name=Jean+Dupont&background=8fc0a9&color=fff" alt="Photo de profil" />
+    </div>
+  </header>
+
+  <div class="service-container">
+    <div class="service-header">
+      <h1>Audit Digital</h1>
+      <p>Analyse complète de votre présence en ligne et recommandations</p>
+    </div>
+
+    <div class="service-content">
+      <form id="auditForm">
+        <div class="audit-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Plateformes utilisées</h3>
+              <p>Cochez toutes les plateformes où vous avez des comptes</p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 15px;">
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="facebook" style="margin-right: 8px;">
+                  Facebook
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="instagram" style="margin-right: 8px;">
+                  Instagram
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="twitter" style="margin-right: 8px;">
+                  Twitter
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="linkedin" style="margin-right: 8px;">
+                  LinkedIn
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="google" style="margin-right: 8px;">
+                  Google
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="amazon" style="margin-right: 8px;">
+                  Amazon
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="netflix" style="margin-right: 8px;">
+                  Netflix
+                </label>
+                <label style="display: flex; align-items: center;">
+                  <input type="checkbox" name="platforms" value="apple" style="margin-right: 8px;">
+                  Apple
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Comptes importants</h3>
+              <p>Listez vos comptes sensibles (banque, crypto, etc.)</p>
+              <textarea name="importantAccounts" class="form-control" style="margin-top: 15px;" placeholder="Ex: Banque XYZ, Compte PayPal, Portefeuille Bitcoin..."></textarea>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Fichiers importants</h3>
+              <p>Décrivez les fichiers à transmettre (photos, documents...)</p>
+              <textarea name="importantFiles" class="form-control" style="margin-top: 15px;" placeholder="Ex: Photos de famille sur Google Photos, Documents notariés sur Dropbox..."></textarea>
+            </div>
+          </div>
+          
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h3>Vos souhaits</h3>
+              <p>Comment souhaitez-vous gérer votre héritage numérique ?</p>
+              <select name="wishes" class="form-control" style="margin-top: 15px;">
+                <option value="delete">Supprimer tous mes comptes</option>
+                <option value="memorial">Transformer en compte mémorial</option>
+                <option value="transfer">Transférer à un proche</option>
+                <option value="specific">Instructions spécifiques (à détailler)</option>
+              </select>
+              <textarea name="specificWishes" class="form-control" style="margin-top: 15px; display: none;" placeholder="Détaillez vos instructions..."></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn">Générer mon audit</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Posteum - Tous droits réservés</p>
+    <div style="margin-top: 20px;">
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="conditions.html">Conditions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Afficher/masquer le champ des instructions spécifiques
+    document.querySelector('select[name="wishes"]').addEventListener('change', function() {
+      const specificWishes = document.querySelector('textarea[name="specificWishes"]');
+      specificWishes.style.display = this.value === 'specific' ? 'block' : 'none';
+    });
+    
+    document.getElementById('auditForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Collecter les données
+      const formData = {
+        platforms: Array.from(document.querySelectorAll('input[name="platforms"]:checked')).map(el => el.value),
+        importantAccounts: document.querySelector('textarea[name="importantAccounts"]').value,
+        importantFiles: document.querySelector('textarea[name="importantFiles"]').value,
+        wishes: document.querySelector('select[name="wishes"]').value,
+        specificWishes: document.querySelector('textarea[name="specificWishes"]').value
+      };
+      
+      // Ici, vous enverriez ces données à votre backend
+      console.log('Données de l\'audit:', formData);
+      
+      // Simulation de génération d'audit
+      alert('Votre audit digital a été généré avec succès. Un PDF détaillé vous a été envoyé par email.');
+      window.location.href = 'tableau-de-bord.html';
+    });
+  </script>
+</body>
+</html>

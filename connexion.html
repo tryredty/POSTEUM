@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connexion - Posteum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #305f72;
+      --secondary: #8fc0a9;
+      --accent: #f9f9f9;
+      --dark: #1f1f1f;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --error: #e74c3c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--accent);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .auth-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    .auth-card {
+      background: var(--light);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px var(--shadow);
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+      margin: 20px;
+    }
+
+    .auth-card h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(143, 192, 169, 0.3);
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px;
+      background-color: var(--secondary);
+      color: var(--light);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #76a68a;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .social-auth {
+      margin-top: 30px;
+    }
+
+    .social-auth p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .social-auth p::before,
+    .social-auth p::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .social-auth p::before {
+      left: 0;
+    }
+
+    .social-auth p::after {
+      right: 0;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--light);
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px var(--shadow);
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--light);
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .auth-card {
+        padding: 30px 20px;
+      }
+
+      .auth-card h2 {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        margin: 10px;
+        padding: 25px 15px;
+      }
+
+      .social-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .social-btn {
+        width: 100%;
+        max-width: 200px;
+        border-radius: 8px;
+        height: 45px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">Posteum</a>
+    <h1>Connectez-vous à votre compte</h1>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>Connexion</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Adresse email</label>
+          <input type="email" id="email" class="form-control" placeholder="votre@email.com" required />
+          <div class="error-message" id="emailError">Veuillez entrer une adresse email valide</div>
+        </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required />
+          <div class="error-message" id="passwordError">Le mot de passe doit contenir au moins 8 caractères</div>
+        </div>
+        <div class="form-group">
+          <a href="mot-de-passe-oublie.html" style="float: right; font-size: 14px;">Mot de passe oublié ?</a>
+        </div>
+        <button type="submit" class="btn">Se connecter</button>
+      </form>
+
+      <div class="social-auth">
+        <p>Ou connectez-vous avec</p>
+        <div class="social-buttons">
+          <div class="social-btn">
+            <i class="fab fa-google" style="color: #DB4437;"></i>
+          </div>
+          <div class="social-btn">
+            <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
+          </div>
+          <div class="social-btn">
+            <i class="fab fa-apple" style="color: #000;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-footer">
+        <p>Nouveau sur Posteum ? <a href="creer-un-compte.html">Créer un compte</a></p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Posteum - Tous droits réservés</p>
+    <div style="margin-top: 20px;">
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="conditions.html">Conditions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validation simple
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      let isValid = true;
+
+      if (!email.includes('@') || !email.includes('.')) {
+        document.getElementById('emailError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('emailError').style.display = 'none';
+      }
+
+      if (password.length < 8) {
+        document.getElementById('passwordError').style.display = 'block';
+        isValid = false;
+      } else {
+        document.getElementById('passwordError').style.display = 'none';
+      }
+
+      if (isValid) {
+        // Ici vous ajouteriez la logique de connexion réelle
+        alert('Connexion en cours...');
+        // window.location.href = 'mon-compte.html';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const plan = urlParams.get('plan') || localStorage.getItem('selectedPlan');
+  
+  if(plan) {
+    localStorage.setItem('selectedPlan', plan);
+    
+    // Redirection après connexion réussie
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulation connexion réussie
+      const isAuthenticated = true; // Remplacer par votre logique réelle
+      
+      if(isAuthenticated) {
+        if(plan === 'essentiel') {
+          window.location.href = 'service-fermeture.html';
+        } else {
+          window.location.href = 'paiement.html?plan=' + plan;
+        }
+      }
+    });
+  }
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paiement sécurisé - Posteum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Stripe Elements -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root {
+      --primary: #305f72;
+      --secondary: #8fc0a9;
+      --accent: #f9f9f9;
+      --dark: #1f1f1f;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --success: #2ecc71;
+      --error: #e74c3c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--accent);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .logo {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .checkout-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .checkout-summary {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .checkout-payment {
+      flex: 1;
+      min-width: 300px;
+      max-width: 500px;
+    }
+
+    .order-summary {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px var(--shadow);
+      margin-bottom: 30px;
+    }
+
+    .order-summary h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 22px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .plan-details {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .plan-name {
+      font-weight: 600;
+    }
+
+    .plan-price {
+      font-weight: 700;
+    }
+
+    .divider {
+      height: 1px;
+      background: #eee;
+      margin: 20px 0;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .payment-card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .payment-card h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 22px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .payment-methods {
+      margin-bottom: 25px;
+    }
+
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .payment-method.selected {
+      border-color: var(--secondary);
+      background: rgba(143, 192, 169, 0.1);
+    }
+
+    .payment-method i {
+      font-size: 24px;
+      margin-right: 15px;
+      width: 30px;
+      text-align: center;
+    }
+
+    .payment-method .fa-credit-card {
+      color: var(--primary);
+    }
+
+    .payment-method .fa-paypal {
+      color: #003087;
+    }
+
+    .payment-form {
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(143, 192, 169, 0.3);
+    }
+
+    /* Stripe Elements */
+    .StripeElement {
+      box-sizing: border-box;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: white;
+    }
+
+    .StripeElement--focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(143, 192, 169, 0.3);
+    }
+
+    .StripeElement--invalid {
+      border-color: var(--error);
+    }
+
+    .StripeElement--webkit-autofill {
+      background-color: #fefde5 !important;
+    }
+
+    .card-errors {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 5px;
+      min-height: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px;
+      background-color: var(--secondary);
+      color: var(--light);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      background-color: #76a68a;
+    }
+
+    .btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .secure-payment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .secure-payment i {
+      margin-right: 8px;
+      color: var(--success);
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--light);
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-container {
+        flex-direction: column;
+      }
+      
+      .checkout-payment {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">Posteum</a>
+  </header>
+
+  <div class="checkout-container">
+    <div class="checkout-summary">
+      <div class="order-summary">
+        <h2>Récapitulatif de commande</h2>
+        <div id="orderDetails">
+          <!-- Rempli par JavaScript -->
+        </div>
+      </div>
+      
+      <div class="order-summary">
+        <h2>Avantages de votre abonnement</h2>
+        <ul id="planBenefits" style="list-style-type: none;">
+          <!-- Rempli par JavaScript -->
+        </ul>
+      </div>
+    </div>
+
+    <div class="checkout-payment">
+      <div class="payment-card">
+        <h2>Paiement sécurisé</h2>
+        
+        <div class="payment-methods">
+          <div class="payment-method selected" id="cardMethod">
+            <i class="far fa-credit-card"></i>
+            <div>Carte bancaire</div>
+          </div>
+          <div class="payment-method" id="paypalMethod">
+            <i class="fab fa-paypal"></i>
+            <div>PayPal</div>
+          </div>
+        </div>
+
+        <div id="cardPaymentForm" class="payment-form">
+          <div class="form-group">
+            <label for="card-element">Informations de carte</label>
+            <div id="card-element">
+              <!-- Stripe Card Element sera inséré ici -->
+            </div>
+            <div id="card-errors" class="card-errors" role="alert"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="nameOnCard">Nom sur la carte</label>
+            <input type="text" id="nameOnCard" class="form-control" placeholder="Jean Dupont" required>
+          </div>
+          
+          <button id="submitBtn" class="btn">
+            <span id="buttonText">Payer maintenant</span>
+            <span id="spinner" style="display: none;">
+              <i class="fas fa-spinner fa-spin"></i>
+            </span>
+          </button>
+          
+          <div class="secure-payment">
+            <i class="fas fa-lock"></i>
+            <span>Paiement sécurisé SSL - Vos données sont protégées</span>
+          </div>
+        </div>
+
+        <div id="paypalPaymentForm" class="payment-form" style="display: none;">
+          <div id="paypal-button-container">
+            <!-- Le bouton PayPal sera inséré ici -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Posteum - Tous droits réservés</p>
+    <div style="margin-top: 20px;">
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="conditions.html">Conditions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Inclure le SDK PayPal -->
+  <script src="https://www.paypal.com/sdk/js?client-id=test&currency=EUR"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Récupérer le plan sélectionné
+      const plan = localStorage.getItem('selectedPlan');
+      const orderDetails = document.getElementById('orderDetails');
+      const planBenefits = document.getElementById('planBenefits');
+      let amount = 0;
+      let planName = '';
+
+      // Configurer les détails de la commande selon le plan
+      if(plan === 'apaise') {
+        planName = 'Plan Apaisé';
+        amount = 5900; // 59€ en centimes
+        orderDetails.innerHTML = `
+          <div class="plan-details">
+            <span class="plan-name">${planName}</span>
+            <span class="plan-price">59,00 €</span>
+          </div>
+          <div class="divider"></div>
+          <div class="total">
+            <span>Total</span>
+            <span>59,00 €</span>
+          </div>
+        `;
+        
+        planBenefits.innerHTML = `
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Message posthume</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Fermeture de comptes</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Signalement de décès</li>
+        `;
+      } else if(plan === 'serenite') {
+        planName = 'Plan Sérénité';
+        amount = 14900; // 149€ en centimes
+        orderDetails.innerHTML = `
+          <div class="plan-details">
+            <span class="plan-name">${planName}</span>
+            <span class="plan-price">149,00 €</span>
+          </div>
+          <div class="divider"></div>
+          <div class="total">
+            <span>Total</span>
+            <span>149,00 €</span>
+          </div>
+        `;
+        
+        planBenefits.innerHTML = `
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Message posthume</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Fermeture de comptes</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Transfert de fichiers</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Signalement de décès</li>
+          <li><i class="fas fa-check" style="color: var(--secondary); margin-right: 10px;"></i> Audit digital</li>
+        `;
+      }
+
+      // Gestion des méthodes de paiement
+      const cardMethod = document.getElementById('cardMethod');
+      const paypalMethod = document.getElementById('paypalMethod');
+      const cardPaymentForm = document.getElementById('cardPaymentForm');
+      const paypalPaymentForm = document.getElementById('paypalPaymentForm');
+
+      cardMethod.addEventListener('click', function() {
+        cardMethod.classList.add('selected');
+        paypalMethod.classList.remove('selected');
+        cardPaymentForm.style.display = 'block';
+        paypalPaymentForm.style.display = 'none';
+      });
+
+      paypalMethod.addEventListener('click', function() {
+        paypalMethod.classList.add('selected');
+        cardMethod.classList.remove('selected');
+        paypalPaymentForm.style.display = 'block';
+        cardPaymentForm.style.display = 'none';
+      });
+
+      // Configuration Stripe
+      const stripe = Stripe('pk_test_51N...'); // Remplacez par votre clé publique Stripe
+      const elements = stripe.elements();
+      const cardElement = elements.create('card', {
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#32325d',
+            '::placeholder': {
+              color: '#aab7c4'
+            }
+          },
+          invalid: {
+            color: '#e74c3c'
+          }
+        }
+      });
+
+      cardElement.mount('#card-element');
+
+      // Gestion des erreurs de carte
+      const cardErrors = document.getElementById('card-errors');
+      cardElement.addEventListener('change', function(event) {
+        if (event.error) {
+          cardErrors.textContent = event.error.message;
+        } else {
+          cardErrors.textContent = '';
+        }
+      });
+
+      // Soumission du formulaire Stripe
+      const form = document.getElementById('cardPaymentForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const buttonText = document.getElementById('buttonText');
+      const spinner = document.getElementById('spinner');
+
+      form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        // Désactiver le bouton pendant le traitement
+        submitBtn.disabled = true;
+        buttonText.style.display = 'none';
+        spinner.style.display = 'inline-block';
+
+        // Créer un paymentMethod avec Stripe
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: {
+            name: document.getElementById('nameOnCard').value
+          }
+        });
+
+        if (error) {
+          // Afficher l'erreur
+          cardErrors.textContent = error.message;
+          submitBtn.disabled = false;
+          buttonText.style.display = 'inline-block';
+          spinner.style.display = 'none';
+        } else {
+          // Envoyer le paymentMethod à votre serveur
+          const response = await fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              paymentMethodId: paymentMethod.id,
+              amount: amount,
+              plan: plan
+            })
+          });
+
+          const paymentIntent = await response.json();
+
+          if (paymentIntent.error) {
+            cardErrors.textContent = paymentIntent.error;
+            submitBtn.disabled = false;
+            buttonText.style.display = 'inline-block';
+            spinner.style.display = 'none';
+          } else {
+            // Confirmer le paiement
+            const { error: confirmError } = await stripe.confirmCardPayment(
+              paymentIntent.clientSecret
+            );
+
+            if (confirmError) {
+              cardErrors.textContent = confirmError.message;
+              submitBtn.disabled = false;
+              buttonText.style.display = 'inline-block';
+              spinner.style.display = 'none';
+            } else {
+              // Paiement réussi
+              localStorage.setItem('paidPlan', plan);
+              window.location.href = 'paiement-reussi.html';
+            }
+          }
+        }
+      });
+
+      // Configuration PayPal
+      paypal.Buttons({
+        style: {
+          shape: 'pill',
+          color: 'blue',
+          layout: 'vertical',
+          label: 'pay'
+        },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: (amount / 100).toFixed(2),
+                currency_code: 'EUR'
+              },
+              description: planName
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            // Paiement réussi
+            localStorage.setItem('paidPlan', plan);
+            window.location.href = 'paiement-reussi.html';
+          });
+        },
+        onError: function(err) {
+          console.error('Erreur PayPal:', err);
+          alert('Une erreur est survenue lors du paiement avec PayPal. Veuillez réessayer.');
+        }
+      }).render('#paypal-button-container');
+    });
+  </script>
+</body>
+</html>

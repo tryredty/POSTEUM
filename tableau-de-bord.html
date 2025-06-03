@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tableau de bord - Posteum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #305f72;
+      --secondary: #8fc0a9;
+      --accent: #f9f9f9;
+      --dark: #1f1f1f;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      line-height: 1.6;
+      background: var(--accent);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--light);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: var(--light);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 24px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-menu img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex-grow: 1;
+    }
+
+    .welcome-banner {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px var(--shadow);
+      text-align: center;
+    }
+
+    .welcome-banner h1 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .service-card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 4px solid var(--secondary);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px var(--glow-color);
+    }
+
+    .service-card.disabled {
+      opacity: 0.6;
+      border-left-color: #ccc;
+      position: relative;
+    }
+
+    .service-card h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .service-card p {
+      color: #555;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .service-card .btn {
+      align-self: flex-start;
+    }
+
+    .upgrade-text {
+      font-size: 14px;
+      color: var(--primary);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .upgrade-text a {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--secondary);
+      color: var(--light);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #76a68a;
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--light);
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">Posteum</a>
+    <div class="user-menu">
+      <span>Bonjour, <strong>Jean</strong></span>
+      <img src="https://ui-avatars.com/api/?name=Jean+Dupont&background=8fc0a9&color=fff" alt="Photo de profil" />
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="welcome-banner">
+      <h1>Votre tableau de bord</h1>
+      <p>Gérez ici tous vos services Posteum en un seul endroit</p>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-card" data-service="1">
+        <h3>Message posthume</h3>
+        <p>Programmez l'envoi de messages après votre décès à vos proches</p>
+        <a href="service-message.html" class="btn">Accéder</a>
+      </div>
+      
+      <div class="service-card" data-service="2">
+        <h3>Fermeture de comptes</h3>
+        <p>Générez automatiquement les documents pour fermer vos comptes en ligne</p>
+        <a href="service-fermeture.html" class="btn">Accéder</a>
+      </div>
+      
+      <div class="service-card" data-service="3">
+        <h3>Transfert de fichiers</h3>
+        <p>Transmettez vos documents importants à vos héritiers</p>
+        <a href="service-transfert.html" class="btn">Accéder</a>
+      </div>
+      
+      <div class="service-card" data-service="4">
+        <h3>Signalement de décès</h3>
+        <p>Générez les documents pour signaler le décès sur les réseaux sociaux</p>
+        <a href="service-signalement.html" class="btn">Accéder</a>
+      </div>
+      
+      <div class="service-card" data-service="5">
+        <h3>Audit digital</h3>
+        <p>Obtenez un rapport complet de votre présence en ligne</p>
+        <a href="service-audit.html" class="btn">Accéder</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Posteum - Tous droits réservés</p>
+    <div style="margin-top: 20px;">
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="conditions.html">Conditions</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const plan = localStorage.getItem('paidPlan') || 'essentiel';
+      
+      // Désactiver les services non inclus
+      if(plan === 'essentiel') {
+        document.querySelectorAll('.service-card:not([data-service="2"])').forEach(card => {
+          card.classList.add('disabled');
+          card.querySelector('.btn').style.display = 'none';
+          card.innerHTML += '<p class="upgrade-text"><em>Non inclus dans votre plan. <a href="paiement.html">Améliorez votre abonnement</a></em></p>';
+        });
+      } 
+      else if(plan === 'apaise') {
+        document.querySelectorAll('.service-card[data-service="3"], .service-card[data-service="5"]').forEach(card => {
+          card.classList.add('disabled');
+          card.querySelector('.btn').style.display = 'none';
+          card.innerHTML += '<p class="upgrade-text"><em>Non inclus dans votre plan. <a href="paiement.html">Améliorez votre abonnement</a></em></p>';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
