@@ -1,0 +1,12 @@
+CREATE DATABASE posteum;
+
+USE posteum;
+
+CREATE TABLE commandes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nom VARCHAR(100),
+  email VARCHAR(100),
+  offre VARCHAR(50),
+  message TEXT,
+  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
